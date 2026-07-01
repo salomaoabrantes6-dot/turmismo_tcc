@@ -1,0 +1,151 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/lading_page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Lading Page</title>
+</head>
+<body>
+    <!-- ===================== LANDING PAGE ===================== -->
+    <div id="page-landing" class="page active">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="hero-logo" style= 'background: url("../static/imagens/IMG-20260416-WA0001.jpg"); background-size: cover;
+     background-position: center;'></div>
+                <h1>Bem-vindo ao <span>Belas</span></h1>
+                <p>Descubra a beleza natural, a cultura vibrante e a história fascinante do município de Belas</p>
+            </div>
+            <div class="scroll-indicator">
+                <div class="scroll-dot"></div>
+            </div>
+        </section>
+    
+        <!-- About -->
+        <section class="about-section">
+            <div class="section-title">
+                <h2>Sobre <span class="text-gradient">Belas</span></h2>
+                <div class="about-divider"></div>
+            </div>
+            <div class="about-grid">
+                <div class="card about-card animate-fadeUp">
+                    <div class="about-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <h3>Localização</h3>
+                    <p>Situa-se na zona Sul da província de Luanda, em Angola. É limitado a Oeste pelo oceano Atlântico e
+                        faz fronteira com municípios como Talatona e Kilamba.</p>
+                </div>
+                <div class="card about-card animate-fadeUp-delay1">
+                    <div class="about-icon"><i class="fas fa-users"></i></div>
+                    <h3>Descrição</h3>
+                    <p>Criado oficialmente em 31 de Março de 2011 (Lei nº 17/11), Belas é um dos eixos de maior expansão da
+                        Capital. O município é caracterizado por contraste entre zonas urbanas modernas e áreas
+                        tradicionais.</p>
+                </div>
+                <div class="card about-card animate-fadeUp-delay2">
+                    <div class="about-icon"><i class="fas fa-ruler-combined"></i></div>
+                    <h3>Extensão</h3>
+                    <p>Abrange uma área de aproximadamente 1046 km². Contando com cerca de 1.230.101 habitantes (projeções
+                        de 2018). Sendo o quarto município mais populoso de Angola.</p>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Map -->
+        <section class="map-section">
+            <h2>Mapa de Belas</h2>
+            <div class="map-container">
+                <iframe title="Mapa de Belas"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125763.0!2d13.1!3d-8.95!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a51f24e1c0a4e3d%3A0x5e02e1e94c3f0b0!2sBelas%2C%20Angola!5e0!3m2!1spt!2sao!4v1700000000000!5m2!1spt!2sao"
+                    allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+    
+        <!-- Tourist Spots Carousel -->
+        <section class="carousel-section">
+            <h2>Principais Pontos Turísticos</h2>
+            <p>Explore os destinos mais incríveis do município de Belas</p>
+            <div class="carousel-wrapper">
+                <div class="carousel-viewport">
+                    <div class="carousel-track" id="carousel-track">
+                        <div class="carousel-slide">
+                            <img src="../static/imagens/Gemini_Generated_Image_oah2snoah2snoah2.png"
+                                alt="Miradouro da Lua">
+                            <div class="slide-overlay"></div>
+                            <div class="slide-info">
+                                <h3>Miradouro da Lua</h3>
+                                <p>Formações rochosas espetaculares junto ao Atlântico</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="../static/imagens/Gemini_Generated_Image_b2ok7nb2ok7nb2ok.png"
+                                alt="Barra do Kwanza">
+                            <div class="slide-overlay"></div>
+                            <div class="slide-info">
+                                <h3>Barra do Kwanza</h3>
+                                <p>Onde o rio Kwanza encontra o oceano Atlântico</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="../static/imagens/Captura de tela 2026-04-24 055736.png"
+                                alt="Museu da Escravatura">
+                            <div class="slide-overlay"></div>
+                            <div class="slide-info">
+                                <h3>Museu da Escravatura</h3>
+                                <p>Memória histórica e arquitectura colonial</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="../static/imagens/Captura de tela 2026-04-24 055235.png"
+                                alt="Mercado do Artesanato">
+                            <div class="slide-overlay"></div>
+                            <div class="slide-info">
+                                <h3>Mercado do Artesanato</h3>
+                                <p>Arte e cultura tradicional angolana</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="../static/imagens/Gemini_Generated_Image_bl9ecvbl9ecvbl9e.png"
+                                alt="Mangais">
+                            <div class="slide-overlay"></div>
+                            <div class="slide-info">
+                                <h3>Mangais</h3>
+                                <p>Ecossistemas naturais de mangue</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn prev" onclick="carouselPrev()"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next" onclick="carouselNext()"><i class="fas fa-chevron-right"></i></button>
+                <div class="carousel-dots" id="carousel-dots"></div>
+            </div>
+        </section>
+        <!-- CTA -->
+        <section class="cta-section">
+            <div class="cta-bg"></div>
+            <div class="cta-content">
+                <h2>Pronto para Explorar?</h2>
+                <p>Descubra tudo o que Belas tem para oferecer — pontos turísticos, praias, cultura e muito mais.</p>
+
+                <a href="{% url 'index' %}" class="btn-wrapper">
+                    <button class="btn-explorar" onclick="navigateTo('explorar')">
+                        <span class="btn-text">Explorar</span>
+                        <i class="fas fa-arrow-right btn-icon"></i>
+                    </button>
+                </a>
+            </div>
+        </section>
+    
+        <footer class="footer">
+            <p>&copy; 2025 Município de Belas — Luanda, Angola</p>
+        </footer>
+    </div>
+    <script src="../static/scripts/ladinPage.js"></script>
+</body>
+</html>

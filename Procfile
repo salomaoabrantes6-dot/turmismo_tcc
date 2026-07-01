@@ -1,0 +1,1 @@
+web: gunicorn Belas_Projecto.wsgi:application

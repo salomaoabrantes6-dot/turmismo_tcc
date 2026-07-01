@@ -1,0 +1,125 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../../static/styles/admin_usuarios.css">
+        <title>Usuários</title>
+    </head>
+
+    <body>
+        <section>
+            <nav>
+                <div>
+                    <img src="../../static/imagens/icons8_anchor_80px.png" alt="king">
+                    <span>Belas Turismo</span>
+                    <p>Admin</p>
+                </div>
+
+                <ul>
+                    <a href="{% url "dashboard" %}">
+                        <li>
+                            <img src="../../static/imagens/icons8_speed_50px.png" alt="dash">
+                            <span>Dashboard</span>
+                        </li>
+                    </a>
+                    
+                    <a href="{% url "pontos_turisticos" %}">
+                        <li>
+                            <img src="../../static/imagens/icons8_marker_50px.png" alt="Pontos">
+                            <span>Pontos turísticos</span>
+                        </li>
+                    </a>
+                    
+                    <a href="{% url "usuarios" %}">
+                        <li>
+                            <img src="../../static/imagens/icons8_add_user_group_man_man_24px.png" alt="users">
+                            <span>Admin usuários</span>
+                        </li>
+                    </a>
+                </ul>
+            </nav>
+
+            <header>
+                <aside>
+                    <h2>Usuários</h2>
+                    <div>
+                        <img src="../../static/imagens/icons8_bell_24px.png" alt="cino">
+                        <p>Admin</p>
+                    </div>
+                </aside>
+
+                <article>
+                    <h1>
+                        <img src="../../static/imagens/icons8_team_48px.png" alt="icone">
+                        Faça o gerenciamento dos Usuários
+                    </h1>
+
+                    <div>
+                        <button>+ Criar Admin</button>
+                    </div>
+
+                    <fieldset>
+                        <table >
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>E-mail</th>
+                                    <th>Permissão</th>
+                                    <th>Status</th>
+                                    <th>Acção</th>
+                                </tr>
+                            </thead>
+    
+                            <tbody>
+                                <tr>
+                                    <td>Gaspar</td>
+                                    <td>Gaspar@gmail.com</td>
+                                    <td>Super Admin</td>
+                                    <td>
+                                        <select name="" id="selecionar" class="status">
+                                            <option value="Ativo" id="ativo">Ativo</option>
+                                            <option value="Inativo" id="inativo">Inativo</option>
+                                        </select>
+                                    </td>
+                                    <td>Editar</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Gaspar</td>
+                                    <td>Gaspar@gmail.com</td>
+                                    <td>Super Admin</td>
+                                    <td>
+                                        <select name="" id="selecionar" class="status">
+                                            <option value="Ativo" id="ativo">Ativo</option>
+                                            <option value="Inativo" id="inativo">Inativo</option>
+                                        </select>
+                                    </td>
+                                    <td>Editar</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Gaspar</td>
+                                    <td>Gaspar@gmail.com</td>
+                                    <td>Super Admin</td>
+                                    <td>
+                                        <select name="" id="selecionar" class="status">
+                                            <option value="Ativo" id="ativo">Ativo</option>
+                                            <option value="Inativo" id="inativo">Inativo</option>
+                                        </select>
+                                    </td>
+                                    <td>Editar</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </article>
+            </header>
+        </section>
+
+        <script src="../../static/scripts/admin_usuarios.js"></script>
+    </body>
+</html>

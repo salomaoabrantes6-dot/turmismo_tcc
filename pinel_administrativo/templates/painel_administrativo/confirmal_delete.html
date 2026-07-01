@@ -1,0 +1,7 @@
+<!-- appAdmin/templates/appAdmin/confirmar_delete.html -->
+<h2>Deseja deletar "{{ ponto.titulo_ponto }}"?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar</button>
+</form>
+<a href="{% url 'pontos_turisticos' %}">Cancelar</a>

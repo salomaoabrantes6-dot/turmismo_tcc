@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pontos Turísticos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #B8860B;
+      --primary-light: #D4A72C;
+      --accent: #25D366;
+      --bg: #f8f6f1;
+      --second-color: #f0ebe0;
+      --card-bg: #ffffff;
+      --text: #1a2a3a;
+      --text-muted: #4a5b6b;
+      --shadow: 0 12px 28px rgba(0,0,0,0.06);
+      --shadow-hover: 0 20px 40px rgba(0,0,0,0.12);
+      --radius: 18px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ===== SECTION ===== */
+    .spots-section {
+      padding: 5rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+    }
+
+    .section-header i {
+      font-size: 1.75rem;
+      color: var(--primary);
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    /* ===== GRID ===== */
+    .spots-grid {
+      background: var(--second-color);
+      padding: 2rem;
+      border-radius: 25px;
+    }
+
+    .spot-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ===== CARD ===== */
+    .spot-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .spot-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .spot-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    .spot-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .spot-card:hover .spot-img img {
+      transform: scale(1.08);
+    }
+
+    .spot-info {
+      padding: 1.25rem;
+    }
+
+    .spot-info h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .spot-location {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .spot-location i { color: var(--primary); }
+
+    .spot-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-explore {
+      background: var(--primary);
+      color: #fff;
+      flex: 1;
+    }
+
+    .btn-explore:hover { background: var(--primary-light); }
+
+    .btn-whatsapp {
+      background: var(--accent);
+      color: #fff;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+    }
+
+    .btn-whatsapp:hover { background: #1ebe5d; }
+
+    .btn-close-modal {
+      background: var(--primary);
+      color: #fff;
+      padding: 0.6rem 2rem;
+    }
+
+    .btn-close-modal:hover { background: var(--primary-light); }
+
+    /* ===== MODAL (nav.esplorar) ===== */
+    nav.esplorar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      z-index: 200;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    nav.esplorar.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    nav.esplorar .place_to_esplorar {
+      width: 100%;
+      max-width: 720px;
+      border-radius: 25px;
+      background: var(--second-color);
+      position: relative;
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    nav.esplorar.active .place_to_esplorar {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close-x {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card-bg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 10;
+    }
+
+    .modal-close-x:hover { background: #eee; }
+
+    .place_to_esplorar > h3 {
+      text-align: center;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 800;
+      padding: 2rem 3rem 0.5rem;
+    }
+
+    .place_to_esplorar figure {
+      padding: 1.5rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .place_to_esplorar figcaption {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .place_to_esplorar figcaption p {
+      margin-bottom: 0.4rem;
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      color: var(--text-muted);
+    }
+
+    .place_to_esplorar figcaption p strong { color: var(--text); }
+
+    .whatsapp-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .whatsapp-link:hover { text-decoration: underline; }
+
+    /* Hotel section */
+    .modal_esplorar_ponto h4 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin: 1.5rem 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .hotel_proximo {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .hotel_proximo > .hotel-img {
+      flex: 1 1 45%;
+      min-width: 200px;
+    }
+
+    .hotel_proximo > .hotel-img img {
+      width: 100%;
+      border-radius: 16px;
+      object-fit: cover;
+      aspect-ratio: 16/10;
+    }
+
+    .infor_hotel {
+      flex: 2 1 45%;
+      min-width: 200px;
+    }
+
+    .infor_hotel .hotel-name {
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .infor_hotel p {
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+      font-size: 0.92rem;
+    }
+
+    .infor_hotel p strong { color: var(--text); }
+
+    .visto {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 3rem;
+      font-size: 1.1rem;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .spot-card {
+      animation: fadeInUp 0.5s ease backwards;
+    }
+
+    .spot-card:nth-child(1) { animation-delay: 0s; }
+    .spot-card:nth-child(2) { animation-delay: 0.1s; }
+    .spot-card:nth-child(3) { animation-delay: 0.2s; }
+    .spot-card:nth-child(4) { animation-delay: 0.3s; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .spots-section { padding: 3rem 1rem; }
+      .spots-grid { padding: 1rem; }
+      .gallery-grid { gap: 0.4rem; }
+      .hotel_proximo { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <section id="pontos-section" class="spots-section">
+    <div class="section-header">
+      <i class="fas fa-map-marker-alt"></i>
+      <h2>Pontos Turísticos</h2>
+    </div>
+    <div class="spots-grid">
+      <div class="spot-card-grid" id="spots-grid">
+        <!-- Cards renderizados pelo JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Template do Modal -->
+  <nav class="esplorar" id="explore-modal">
+    <div class="place_to_esplorar">
+      <button class="modal-close-x" id="modal-close-x">
+        <i class="fas fa-times"></i>
+      </button>
+      <h3 id="modal-title"></h3>
+      <figure>
+        <nav>
+          <div class="gallery-grid" id="modal-gallery"></div>
+        </nav>
+        <figcaption id="modal-info"></figcaption>
+        <div class="modal_esplorar_ponto" id="modal-hotel"></div>
+      </figure>
+    </div>
+  </nav>
+
+<script>
+// ===== DADOS DOS PONTOS TURÍSTICOS =====
+const pontos = [
+  {
+    id: 1,
+    titulo: "Barra do Kwanza",
+    imagem: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=450&fit=crop",
+    imagens: [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1476673160081-cf065607f449?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=400&h=250&fit=crop"
+    ],
+    descricao: "A Barra do Kwanza é um dos destinos mais bonitos de Angola, onde o rio Kwanza encontra o Oceano Atlântico.",
+    localizacao: "Luanda, Angola",
+    servicos: "Passeios de barco, pesca, restaurantes, bar na praia",
+    horario: "08:00 - 18:00",
+    contacto: "244923456789",
+    hotel: {
+      imagem: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&h=300&fit=crop",
+      titulo: "Hotel Praia do Sol",
+      descricao: "Hotel à beira-mar com vista panorâmica para o oceano.",
+      localizacao: "Barra do Kwanza, Luanda",
+      servicos: "Piscina, Wi-Fi, restaurante, spa",
+      horario: "24 horas",
+      contacto: "244912345678"
+    }
+  },
+  {
+    id: 2,
+    titulo: "Miradouro da Lua",
+    imagem: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=450&fit=crop",
+    imagens: [
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=250&fit=crop"
+    ],
+    descricao: "Formações rochosas únicas esculpidas pela erosão ao longo de milhões de anos, semelhantes à paisagem lunar.",
+    localizacao: "Belas, Luanda",
+    servicos: "Guias turísticos, miradouro, estacionamento",
+    horario: "06:00 - 18:00",
+    contacto: "244934567890",
+    hotel: {
+      imagem: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=500&h=300&fit=crop",
+      titulo: "Hotel Vista Lua",
+      descricao: "Conforto e natureza num só lugar.",
+      localizacao: "Belas, Luanda",
+      servicos: "Restaurante, piscina, transporte",
+      horario: "24 horas",
+      contacto: "244945678901"
+    }
+  },
+  {
+    id: 3,
+    titulo: "Fortaleza de São Miguel",
+    imagem: "https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=600&h=450&fit=crop",
+    imagens: [
+      "https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=400&h=250&fit=crop"
+    ],
+    descricao: "Fortaleza histórica do século XVI com museu e vistas panorâmicas da baía de Luanda.",
+    localizacao: "Centro, Luanda",
+    servicos: "Museu, visitas guiadas, loja de souvenirs",
+    horario: "09:00 - 17:00",
+    contacto: "244956789012",
+    hotel: null
+  },
+  {
+    id: 4,
+    titulo: "Ilha de Luanda",
+    imagem: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&h=450&fit=crop",
+    imagens: [
+      "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1468413253725-0d5181091126?w=400&h=250&fit=crop",
+      "https://images.unsplash.com/photo-1484821582734-6c6c9f99a672?w=400&h=250&fit=crop"
+    ],
+    descricao: "Península vibrante com praias, restaurantes e vida noturna intensa.",
+    localizacao: "Ilha de Luanda, Luanda",
+    servicos: "Praias, restaurantes, bares, desportos aquáticos",
+    horario: "Aberto 24h",
+    contacto: "244967890123",
+    hotel: {
+      imagem: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500&h=300&fit=crop",
+      titulo: "Hotel Ilha Beach",
+      descricao: "Hotel moderno de frente para a praia.",
+      localizacao: "Ilha de Luanda",
+      servicos: "Praia privada, restaurante, bar, spa",
+      horario: "24 horas",
+      contacto: "244978901234"
+    }
+  }
+];
+
+// ===== REFERÊNCIAS DO DOM =====
+const spotsGrid = document.getElementById('spots-grid');
+const modal = document.getElementById('explore-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalGallery = document.getElementById('modal-gallery');
+const modalInfo = document.getElementById('modal-info');
+const modalHotel = document.getElementById('modal-hotel');
+const modalCloseX = document.getElementById('modal-close-x');
+
+// ===== RENDERIZAR CARDS =====
+function renderCards() {
+  if (pontos.length === 0) {
+    spotsGrid.innerHTML = '<p class="empty-state">Nenhum ponto turístico disponibilizado.</p>';
+    return;
+  }
+
+  spotsGrid.innerHTML = pontos.map(p => `
+    <div class="spot-card">
+      <div class="spot-img">
+        <img src="${p.imagem}" alt="${p.titulo}" loading="lazy">
+      </div>
+      <div class="spot-info">
+        <h3>${p.titulo}</h3>
+        <div class="spot-location">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>${p.localizacao}</span>
+        </div>
+        <div class="spot-actions">
+          <button class="btn btn-explore" onclick="abrirModal(${p.id})">
+            Explorar <i class="fas fa-arrow-right"></i>
+          </button>
+          <a class="btn btn-whatsapp" href="https://wa.me/${p.contacto}?text=Olá!" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== ABRIR MODAL =====
+function abrirModal(id) {
+  const ponto = pontos.find(p => p.id === id);
+  if (!ponto) return;
+
+  modalTitle.textContent = ponto.titulo;
+
+  modalGallery.innerHTML = ponto.imagens.map((img, i) =>
+    `<img src="${img}" alt="${ponto.titulo} ${i + 1}">`
+  ).join('');
+
+  modalInfo.innerHTML = `
+    <p>${ponto.descricao}</p>
+    <p><strong>Localização:</strong> ${ponto.localizacao}</p>
+    <p><strong>Serviços:</strong> ${ponto.servicos}</p>
+    <p><strong>Horário:</strong> ${ponto.horario}</p>
+    <a class="whatsapp-link" href="https://wa.me/${ponto.contacto}?text=Olá!" target="_blank" rel="noopener">
+      <i class="fab fa-whatsapp"></i> Contactar via WhatsApp
+    </a>
+  `;
+
+  if (ponto.hotel) {
+    modalHotel.innerHTML = `
+      <h4><i class="fas fa-hotel"></i> Hotel mais próximo do ponto</h4>
+      <div class="hotel_proximo">
+        <div class="hotel-img">
+          <img src="${ponto.hotel.imagem}" alt="${ponto.hotel.titulo}">
+        </div>
+        <div class="infor_hotel">
+          <p class="hotel-name">${ponto.hotel.titulo}</p>
+          <p>${ponto.hotel.descricao}</p>
+          <p><strong>Localização:</strong> ${ponto.hotel.localizacao}</p>
+          <p><strong>Serviços:</strong> ${ponto.hotel.servicos}</p>
+          <p><strong>Horário:</strong> ${ponto.hotel.horario}</p>
+          <a class="whatsapp-link" href="https://wa.me/${ponto.hotel.contacto}?text=Olá!" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i> WhatsApp do Hotel
+          </a>
+        </div>
+        <div class="visto">
+          <button class="btn btn-close-modal" onclick="fecharModal()">Visto</button>
+        </div>
+      </div>
+    `;
+  } else {
+    modalHotel.innerHTML = `
+      <div class="visto" style="margin-top:1.5rem">
+        <button class="btn btn-close-modal" onclick="fecharModal()">Visto</button>
+      </div>
+    `;
+  }
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// ===== FECHAR MODAL =====
+function fecharModal() {
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Fechar ao clicar no X
+modalCloseX.addEventListener('click', fecharModal);
+
+// Fechar ao clicar fora do conteúdo
+modal.addEventListener('click', function(e) {
+  if (e.target === modal) fecharModal();
+});
+
+// Fechar com tecla Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') fecharModal();
+});
+
+// ===== INICIAR =====
+renderCards();
+</script>
+
+</body>
+</html>

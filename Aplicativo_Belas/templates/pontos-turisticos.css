@@ -1,0 +1,418 @@
+/* ===== VARIÁVEIS ===== */
+:root {
+  --primary: #B8860B;
+  --primary-light: #D4A72C;
+  --accent: #25D366;
+  --bg: #f8f6f1;
+  --second-color: #f0ebe0;
+  --card-bg: #ffffff;
+  --text: #1a2a3a;
+  --text-muted: #4a5b6b;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.12);
+  --radius: 18px;
+  --radius-lg: 25px;
+}
+
+/* ===== SECTION ===== */
+.spots-section {
+  padding: 5rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.spots-section .section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.spots-section .section-header i {
+  font-size: 1.75rem;
+  color: var(--primary);
+}
+
+.spots-section .section-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* ===== GRID ===== */
+.spots-grid {
+  background: var(--second-color);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+}
+
+.spot-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===== CARD (cada .organiza) ===== */
+.spot-card .organiza {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.spot-card .organiza:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Animação de entrada escalonada */
+.spot-card .organiza {
+  animation: fadeInUp 0.5s ease backwards;
+}
+.spot-card .organiza:nth-child(1) { animation-delay: 0s; }
+.spot-card .organiza:nth-child(2) { animation-delay: 0.1s; }
+.spot-card .organiza:nth-child(3) { animation-delay: 0.15s; }
+.spot-card .organiza:nth-child(4) { animation-delay: 0.2s; }
+.spot-card .organiza:nth-child(5) { animation-delay: 0.25s; }
+.spot-card .organiza:nth-child(6) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Imagem do card */
+.spot-card .spot-img {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.spot-card .spot-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.spot-card .organiza:hover .spot-img img {
+  transform: scale(1.08);
+}
+
+/* Info do card */
+.spot-card .spot-info {
+  padding: 1.25rem;
+}
+
+.spot-card .spot-info h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+/* Botões */
+.spot-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.spot-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.spot-actions .btn_open_explorar {
+  background: var(--primary);
+  color: #fff;
+  flex: 1;
+}
+.spot-actions .btn_open_explorar:hover {
+  background: var(--primary-light);
+}
+
+.spot-actions .btn-whatsapp {
+  background: var(--accent);
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+}
+.spot-actions .btn-whatsapp:hover {
+  background: #1ebe5d;
+}
+.spot-actions .btn-whatsapp img {
+  width: 22px;
+  height: 22px;
+}
+
+/* ===== MODAL (nav.esplorar) ===== */
+nav.esplorar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+nav.esplorar.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Conteúdo do modal */
+.place_to_esplorar {
+  width: 100%;
+  max-width: 720px;
+  border-radius: var(--radius-lg);
+  background: var(--second-color);
+  position: relative;
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+nav.esplorar.active .place_to_esplorar {
+  transform: scale(1) translateY(0);
+}
+
+/* Botão X de fechar */
+.place_to_esplorar .modal-close-x {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--card-bg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+  z-index: 10;
+  color: var(--text);
+}
+.place_to_esplorar .modal-close-x:hover {
+  background: #e8e8e8;
+  transform: scale(1.1);
+}
+
+/* Título do modal */
+.place_to_esplorar h3 {
+  text-align: center;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 800;
+  padding: 2rem 3rem 0.5rem;
+  color: var(--text);
+}
+
+.place_to_esplorar figure {
+  padding: 1.5rem;
+}
+
+/* Galeria de imagens */
+.place_to_esplorar figure nav div {
+  display: flex;
+  width: 100%;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.place_to_esplorar figure nav div img {
+  width: 50%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
+.place_to_esplorar figure nav div img:hover {
+  transform: scale(1.03);
+}
+
+/* Legenda / info do ponto */
+.place_to_esplorar figure figcaption {
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.place_to_esplorar figure figcaption p {
+  margin-bottom: 0.4rem;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.place_to_esplorar figure figcaption p strong {
+  color: var(--text);
+}
+
+.place_to_esplorar figure figcaption a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  transition: opacity 0.2s;
+}
+.place_to_esplorar figure figcaption a:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+.place_to_esplorar figure figcaption a img {
+  width: 24px;
+  height: 24px;
+}
+
+/* ===== Hotel mais próximo ===== */
+.modal_esplorar_ponto h4 {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 1.5rem 0 1rem;
+  color: var(--text);
+}
+
+.hotel_proximo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.hotel_proximo > div:first-child {
+  flex: 1 1 45%;
+  min-width: 200px;
+}
+
+.hotel_proximo > div:first-child img {
+  width: 100%;
+  border-radius: 16px;
+  object-fit: cover;
+  aspect-ratio: 16 / 10;
+}
+
+.hotel_proximo .infor_hotel {
+  flex: 2 1 45%;
+  min-width: 200px;
+}
+
+.hotel_proximo .infor_hotel p:first-child {
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.hotel_proximo .infor_hotel p {
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+  font-size: 0.92rem;
+}
+
+.hotel_proximo .infor_hotel p strong {
+  color: var(--text);
+}
+
+.hotel_proximo .infor_hotel a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+}
+.hotel_proximo .infor_hotel a:hover {
+  text-decoration: underline;
+}
+.hotel_proximo .infor_hotel a img {
+  width: 22px;
+  height: 22px;
+}
+
+/* Botão "Visto" */
+.hotel_proximo .visto,
+.visto {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.sair_do_saber_mais {
+  padding: 0.6rem 2rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.sair_do_saber_mais:hover {
+  background: var(--primary-light);
+}
+
+/* Estado vazio */
+.spots-grid p:only-child {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 3rem;
+  font-size: 1.1rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .spot-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .spots-section {
+    padding: 3rem 1rem;
+  }
+  .spots-grid {
+    padding: 1rem;
+  }
+  .place_to_esplorar figure nav div {
+    gap: 0.4rem;
+  }
+  .hotel_proximo {
+    flex-direction: column;
+  }
+}

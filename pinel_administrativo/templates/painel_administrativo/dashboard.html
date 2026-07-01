@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área Administrativa - Belas</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../static/styles/dashboard.css">
+    
+</head>
+<body class='body_index'>
+    <!-- Overlay para mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Layout Admin -->
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon" style="background: url('{% static "imagens/IMG-20260416-WA0001.jpg" %}'); background-size: cover; background-position: center;"></div>
+                <span>Belas Admin</span>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="{% url 'dashboard' %}" class="active">
+                        <i class="fas fa-chart-pie"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'pontos_turisticos' %}">
+                        <i class="fas fa-map-marker-alt"></i> Pontos Turísticos
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'praias' %}">
+                        <i class="fas fa-umbrella-beach"></i> Praias
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'usuarios' %}">
+                        <i class="fas fa-users-cog"></i> Utilizadores
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'logout_view' %}">
+                    <button class="btn btn-ghost" style="width: 100%;">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <button class="btn btn-icon" id="sidebar-toggle" onclick="toggleSidebar()" style="display: none;">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="admin-page-title">Dashboard</h1>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <!-- Botão Dark Mode -->
+                    <button class="theme-toggle" onclick="toggleDarkMode()" id="theme-toggle" title="Alternar modo escuro">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Administrador</span>
+                    <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: var(--primary-fg); font-size: 0.85rem; font-weight: 700;">
+                        A
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="admin-content">
+                <!-- Dashboard Tab -->
+                <div id="tab-dashboard" class="admin-tab">
+                    <!-- Estatísticas -->
+                    <div class="stats-grid">
+                        <div class="card stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-pontos">{{ pontos|length }}</h3>
+                                <p>Pontos Turísticos</p>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-umbrella-beach"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-praias">{{ praias_belas|length }}</h3>
+                                <p>Praias</p>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card">
+                            <div class="stat-icon gold">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-imagens" class='inserir'>{{ total_imagens }}</h3>
+                                <p>Imagens</p>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card">
+                            <div class="stat-icon brown">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-feedbacks">{{ depoimentos|length }}</h3>
+                                <p>Feedbacks</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Feedbacks -->
+                    <h2 style="font-size: 1.25rem; margin-bottom: 1rem; font-weight: 600;">
+                        Feedbacks Recentes
+                    </h2>
+
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Imagem</th>
+                                    <th>Nome</th>
+                                    <th>Mensagem</th>
+                                    <th>Data</th>
+                                    <th>Nota</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feedbacks-table">
+                                {% for feedback in depoimentos %}
+                                <tr>
+                                    <td>
+                                        {% if feedback.image_file %}
+                                        <img src="{{ feedback.image_file.url }}" 
+                                             width="60" 
+                                             height="60" 
+                                             style="border-radius: 10px; object-fit: cover;">
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ feedback.nome }}</td>
+                                    <td>{{ feedback.mensagem }}</td>
+                                    <td>{{ feedback.data_criacao }}</td>
+                                    <td>{{ feedback.nota }}</td>
+                                    <td>
+                                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                            
+                                            <a href="{% url 'acao_depoimento' feedback.id 'eliminar' %}" class="btn-eliminar" onclick="return confirm('Deseja realmente excluir o depoimento de {{ feedback.nome }}? Esta ação é irreversível.');">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+                                        <i class="fas fa-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                                        Nenhum feedback recebido
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para alternar a sidebar (mobile)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Função para alternar o modo dark
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            
+            const themeToggle = document.getElementById('theme-toggle');
+            const icon = themeToggle.querySelector('i');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Carregar tema salvo
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('theme-toggle');
+            const icon = themeToggle.querySelector('i');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        // Fechar sidebar ao redimensionar para desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const sidebar = document.getElementById('admin-sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Marcar link ativo na sidebar baseado na URL
+            const currentPath = window.location.pathname;
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            sidebarLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>

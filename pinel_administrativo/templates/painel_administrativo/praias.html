@@ -1,0 +1,314 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Praias - Belas Admin</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/praias.css">
+
+    
+</head>
+<body>
+    <!-- Overlay mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- ===================== ADMIN DASHBOARD ===================== -->
+    <div id="page-admin" class="page">
+        <div class="admin-layout">
+            <!-- Sidebar -->
+            <aside class="admin-sidebar" id="admin-sidebar">
+                <div class="sidebar-brand">
+                    <div class="brand-icon" style="background: url('{% static "imagens/IMG-20260416-WA0001.jpg" %}'); background-size: cover; background-position: center;"></div>
+                    <span>Belas Admin</span>
+                </div>
+                
+                <ul class="sidebar-nav">
+                    <li>
+                        <a href="{% url 'dashboard' %}">
+                            <i class="fas fa-chart-pie"></i> Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'pontos_turisticos' %}">
+                            <i class="fas fa-map-marker-alt"></i> Pontos Turísticos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'praias' %}" class="active">
+                            <i class="fas fa-umbrella-beach"></i> Praias
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'usuarios' %}">
+                            <i class="fas fa-users-cog"></i> Utilizadores
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="sidebar-footer">
+                    <a href="{% url 'logout_view' %}">
+                        <button class="btn btn-ghost" style="width: 100%;">
+                            <i class="fas fa-sign-out-alt"></i> Sair
+                        </button>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Main -->
+            <div class="admin-main">
+                <header class="admin-header">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <button class="btn btn-icon" id="sidebar-toggle" onclick="toggleSidebar()" style="display: none;">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h1 id="admin-page-title">🏖️ Gestão de Praias</h1>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 0.85rem; color: var(--muted-fg);">Administrador</span>
+                        <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--ocean-blue); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+                            A
+                        </div>
+                    </div>
+                </header>
+
+                <div class="admin-content">
+                    <!-- ===================== MODAL: ADICIONAR PRAIA ===================== -->
+                    <div id="modal-praia" class="modal-overlay">
+                        <div class="modal">
+                            <div class="modal-header">
+                                <h3>🏝️ Nova Praia</h3>
+                                <button class="btn btn-icon" onclick="closeModal('modal-praia')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" enctype="multipart/form-data" action="{% url 'praias' %}">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <div class="modal-footer" style="padding: 0; border: none; margin-top: 1.5rem;">
+                                        <button type="button" class="btn btn-outline" onclick="closeModal('modal-praia')">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Guardar Praia
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===================== MODAIS DE EDIÇÃO ===================== -->
+                    {% for praia in praias_belas %}
+                    <div id="modal-edit-{{ praia.id }}" class="modal-overlay">
+                        <div class="modal">
+                            <div class="modal-header">
+                                <h3>✏️ Editar Praia</h3>
+                                <button class="btn btn-icon" onclick="closeModal('modal-edit-{{ praia.id }}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'praiasBelas_editar' praia.id %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    
+                                    <div class="form-group">
+                                        <label>📸 Imagem da Praia</label>
+                                        {% if praia.imagem_praia.url %}
+                                        <div class="current-image-preview">
+                                            <img src="{{ praia.imagem_praia.url }}" width="100" style="border-radius: 12px;">
+                                            <span style="font-size: 0.8rem; color: var(--muted-fg);">(Imagem atual)</span>
+                                        </div>
+                                        {% endif %}
+                                        <input type="file" name="imagem_praia" style="margin-top: 0.5rem;">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>📝 Título da Praia</label>
+                                        <input type="text" name="titulo_praia" value="{{ praia.titulo_praia }}" placeholder="Nome da praia">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>📄 Descrição</label>
+                                        <textarea name="descricao_praia" placeholder="Descreva a praia...">{{ praia.descricao_praia }}</textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>📍 Localização</label>
+                                        <input type="text" name="localizacao_praia" value="{{ praia.localizacao_ponto }}" placeholder="Localização da praia">
+                                    </div>
+                                    
+                                    <div class="modal-footer" style="padding: 0; border: none; margin-top: 1.5rem;">
+                                        <button type="button" class="btn btn-outline" onclick="closeModal('modal-edit-{{ praia.id }}')">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Salvar Alterações
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- ===================== GRID DE PRAIAS ===================== -->
+                    <div id="tab-praias" class="admin-tab animate-fadeUp">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                            <h2 style="font-size: 1.5rem; font-weight: 700;">Praias Cadastradas</h2>
+                            <button class="btn btn-primary" onclick="openModal('modal-praia')">
+                                <i class="fas fa-plus"></i> Adicionar Praia
+                            </button>
+                        </div>
+
+                        <div class="praias-grid">
+                            {% for praia in praias_belas %}
+                            <div class="praia-card animate-fadeUp">
+                                <div class="praia-image-wrapper">
+                                    <img src="{{ praia.imagem_praia.url }}" alt="{{ praia.titulo_praia }}" loading="lazy">
+                                    <div class="praia-image-overlay">
+                                        <span class="praia-badge">
+                                            <i class="fas fa-umbrella-beach"></i> Praia
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="praia-body">
+                                    <h3>{{ praia.titulo_praia }}</h3>
+                                    {% if praia.localizacao_ponto %}
+                                    <div class="location">
+                                        <i class="fas fa-location-dot"></i>
+                                        <span>{{ praia.localizacao_ponto }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if praia.descricao_praia %}
+                                    <p class="description">{{ praia.descricao_praia }}</p>
+                                    {% endif %}
+                                    <div class="praia-actions">
+                                        <button type="button" class="btn btn-edit btn-sm" onclick="openModal('modal-edit-{{ praia.id }}')">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </button>
+                                        <form action="{% url 'deletar_praia' praia.id %}" method="post" style="flex: 1; display: flex;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm" style="width: 100%;" 
+                                                    onclick="return confirm('Deseja realmente excluir {{ praia.titulo_praia }}? Esta ação é irreversível.');">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="empty-state">
+                                <i class="fas fa-umbrella-beach"></i>
+                                <h3>Nenhuma praia cadastrada</h3>
+                                <p>Clique em "Adicionar Praia" para começar!</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== VERIFICAR TEMA AO CARREGAR (DEPENDENTE DA DASHBOARD) =====
+        function checkAndApplyTheme() {
+            // Usa a mesma chave 'theme' da dashboard
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        // ===== SIDEBAR MOBILE =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // ===== MODALS =====
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Fechar modal clicando fora
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal-overlay.open');
+                openModals.forEach(modal => {
+                    modal.classList.remove('open');
+                });
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Fechar sidebar ao redimensionar
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const sidebar = document.getElementById('admin-sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aplicar tema baseado no localStorage da dashboard
+            checkAndApplyTheme();
+            
+            // Marcar link ativo na sidebar
+            const currentPath = window.location.pathname;
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            sidebarLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+
+            // Observer para detectar mudanças no tema (caso seja alterado em outra aba)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'theme') {
+                    checkAndApplyTheme();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
