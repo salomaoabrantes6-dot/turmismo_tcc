@@ -131,19 +131,20 @@ STATIC_URL = 'static/'
 # Diretório para onde o Django jogará todos os arquivos estáticos unificados em produção
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# CORREÇÃO AQUI: Onde o Django busca os arquivos estáticos durante o desenvolvimento.
+# Onde o Django busca os arquivos estáticos durante o desenvolvimento.
 # Apontando diretamente para dentro da pasta Aplicativo_Belas
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'Aplicativo_Belas', 'static'),
 ]
 
-# Configuração de armazenamento do WhiteNoise para compactação eficiente
+# CORREÇÃO AQUI: Alterado para CompressedStaticFilesStorage para o WhiteNoise
+# ignorar links quebrados ou caminhos suspeitos nos arquivos CSS externos durante o build.
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
