@@ -41,22 +41,25 @@ def ladingPage(request):
     
 
 def login_view(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        return redirect('/admin/') # Se já estiver logado, vai direto para o painel
+        
     if request.method == 'POST': 
         email = request.POST.get('email')
         password = request.POST.get('password')
         
-        try:
-            user_obj = get_user_model().objects.get(email=email)
-            user = authenticate(request, username=user_obj.username, password=password)
-        except get_user_model().DoesNotExist:
-            user = None
+        # 🔹 CORRECÇÃO: O Django espera o identificador único (e-mail) no parâmetro 'username'
+        user = authenticate(request, username=email, password=password)
             
-        if user is not None and user.is_superuser:
-            auth_login(request, user)
-            return redirect('/admin/')
+        if user is not None:
+            if user.is_superuser:
+                auth_login(request, user)
+                return redirect('/admin/')  # Redireciona com sucesso para o painel administrativo
+            else:
+                messages.error(request, 'Acesso negado: Esta conta não tem permissões de Superusuário.')
         else:
-            messages.error(request, 'Acesso negado: Apenas admin')
-    
+            messages.error(request, 'E-mail ou palavra-passe incorretos.')
+            
     return render(request, 'login.html')
 
 
