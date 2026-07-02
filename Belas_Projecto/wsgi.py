@@ -5,31 +5,28 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Belas_Projecto.settings')
 
 application = get_wsgi_application()
 
-# --- INSTALAÇÃO FORÇADA DO ADMINISTRADOR ---
+# --- FORÇAR SUPERUSUÁRIO NO BANCO POSTGRES ---
 try:
     from global_models.models import Usuario
     
-    username_admin = 'admin'
     email_admin = 'admin@email.com'
-    senha_admin = '123456'  # <--- Certifique-se de usar esta sem espaços
+    senha_admin = '123456'
     
-    # Buscamos se já existe, ou criamos um do zero
-    user, created = Usuario.objects.get_or_create(username=username_admin)
+    # 1. Se não existir, cria. Se existir, não faz nada aqui.
+    user, created = Usuario.objects.get_or_create(email=email_admin)
     
-    if created:
-        print("Criando utilizador admin do zero...")
-        user.email = email_admin
-    else:
-        print("Utilizador já existia. Forçando atualização de permissões...")
-
-    # Forçamos todas as flags de segurança do Django
+    # 2. Forçamos a nova senha por segurança
     user.set_password(senha_admin)
-    user.is_superuser = True
-    user.is_staff = True
-    user.is_active = True  # <--- MUITO IMPORTANTE: Garante que a conta não está bloqueada
     user.save()
     
-    print("Administrador atualizado e ativo com sucesso!")
+    # 3. O SEGREDO: Força a atualização direta das permissões no banco de dados
+    Usuario.objects.filter(email=email_admin).update(
+        is_superuser=True,
+        is_staff=True,
+        is_active=True
+    )
+    
+    print("Sucesso: Permissões de Superusuário injetadas diretamente!")
 except Exception as e:
-    print(f"Aviso na criação do superusuário: {e}")
+    print(f"Aviso na configuração do admin: {e}")
 # ---------------------------------------------
