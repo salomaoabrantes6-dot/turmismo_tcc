@@ -90,7 +90,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{% url 'pontos_turisticos' %}" method="POST" enctype="multipart/form-data">
+                                <form action="{% url 'pontos_turisticos' %}" method="POST" enctype="multipart/form-data" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     {{ form.as_p }}
                                     <div class="modal-footer" style="padding: 0; border: none; margin-top: 1.5rem;">

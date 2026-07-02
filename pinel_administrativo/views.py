@@ -142,10 +142,20 @@ def logout_view(request):
 # appAdmin/views.py
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from global_models.models import PontoTuristico, praias
+from .forms import PontoTuristicoForm, praiasForm
+
+# -----------------------------------------------------------------------------
+# GESTÃO DE PONTOS TURÍSTICOS
+# -----------------------------------------------------------------------------
 @login_required
 def pontos_turisticos(request, pk=None):
     """
-    CRUD em uma página: se pk é passado, editamos, senão criamos
+    CRUD em uma página: se pk é passado, editamos, senão criamos.
+    Protegido contra Internal Server Error (500).
     """
     if pk:
         ponto = get_object_or_404(PontoTuristico, pk=pk)
@@ -153,30 +163,70 @@ def pontos_turisticos(request, pk=None):
     else:
         form = PontoTuristicoForm(request.POST or None, request.FILES or None)
 
-    if form.is_valid():
-        form.save()
-        return redirect('pontos_turisticos')  # volta para a mesma página
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                messages.success(request, 'Ponto turístico guardado com sucesso!')
+                return redirect('pontos_turisticos')
+            except Exception as e:
+                # Captura erros de banco de dados (ex: integridade, colunas nulas, caminhos de arquivo)
+                messages.error(request, f'Erro interno ao gravar no banco de dados: {e}')
+        else:
+            # Captura falhas de preenchimento nos inputs do formulário
+            messages.error(request, f'Erro de validação no formulário: {form.errors}')
 
     pontos = PontoTuristico.objects.all()
-    return render(request, 'painel_administrativo/pontos_turisticos.html', {'form': form, 'pontos': pontos, 'pk': pk})
+    return render(request, 'painel_administrativo/pontos_turisticos.html', {
+        'form': form, 
+        'pontos': pontos, 
+        'pk': pk
+    })
 
-# Adicionar praias
+
+@login_required
+def deletar_ponto(request, pk):
+    """
+    Remove um ponto turístico com captura de segurança.
+    """
+    ponto = get_object_or_404(PontoTuristico, pk=pk)
+    if request.method == 'POST':
+        try:
+            ponto.delete()
+            messages.success(request, 'Ponto turístico eliminado com sucesso.')
+        except Exception as e:
+            messages.error(request, f'Não foi possível eliminar o ponto turístico: {e}')
+    return redirect('pontos_turisticos')
+
+
+# -----------------------------------------------------------------------------
+# GESTÃO DE PRAIAS
+# -----------------------------------------------------------------------------
 @login_required
 def praiasBelas(request, pk=None):
+    """
+    CRUD de praias em uma única página.
+    Protegido contra falhas críticas de salvamento.
+    """
     if pk:
         praia = get_object_or_404(praias, pk=pk)
         form = praiasForm(request.POST or None, request.FILES or None, instance=praia)
     else:
         form = praiasForm(request.POST or None, request.FILES or None)
 
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect('praias')
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                messages.success(request, 'Dados da praia guardados com sucesso!')
+                return redirect('praias')
+            except Exception as e:
+                messages.error(request, f'Erro interno ao gravar a praia no banco: {e}')
+        else:
+            messages.error(request, f'Erro de validação no formulário da praia: {form.errors}')
 
     praias_belas = praias.objects.all()
     praias_belas_total = praias.objects.count()
-    
-    # Apenas depoimentos que ainda não foram publicados
     
     return render(request, 'painel_administrativo/praias.html', {
         'form': form,
@@ -186,19 +236,18 @@ def praiasBelas(request, pk=None):
     })
 
 
-
-@login_required
-def deletar_ponto(request, pk):
-    ponto = get_object_or_404(PontoTuristico, pk=pk)
-    if request.method == 'POST':
-        ponto.delete()
-    return redirect('pontos_turisticos')
-
 @login_required
 def deletar_praia(request, pk):
+    """
+    Remove uma praia com captura de segurança.
+    """
     deletPraia = get_object_or_404(praias, pk=pk)
     if request.method == 'POST':
-        deletPraia.delete()
+        try:
+            deletPraia.delete()
+            messages.success(request, 'Praia eliminada com sucesso.')
+        except Exception as e:
+            messages.error(request, f'Não foi possível eliminar a praia: {e}')
     return redirect('praias')
     
 #Deletar depoimento
