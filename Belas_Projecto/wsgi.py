@@ -11,7 +11,7 @@ try:
     
     username_admin = 'admin'
     email_admin = 'admin@email.com'
-    senha_admin = 'SuaSenhaSegura123'  # <--- Certifique-se de usar esta sem espaços
+    senha_admin = '123456'  # <--- Certifique-se de usar esta sem espaços
     
     # Buscamos se já existe, ou criamos um do zero
     user, created = Usuario.objects.get_or_create(username=username_admin)
