@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'global_models'
 ]
 
+# Modelo personalizado de usuário do seu TCC
 AUTH_USER_MODEL = 'global_models.Usuario'
 
 MIDDLEWARE = [
@@ -137,7 +138,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'Aplicativo_Belas', 'static'),
 ]
 
-# CORREÇÃO AQUI: Alterado para CompressedStaticFilesStorage para o WhiteNoise
+# CORREÇÃO: Mantido CompressedStaticFilesStorage para o WhiteNoise
 # ignorar links quebrados ou caminhos suspeitos nos arquivos CSS externos durante o build.
 STORAGES = {
     "default": {
