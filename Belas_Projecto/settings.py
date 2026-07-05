@@ -159,20 +159,20 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 't3SnQ08x_jSQRrdNXPKO9xTzf6U'),
 }
 
-# Configuração unificada de Backends para Django 6.x
+# Configuração unificada de Backends para Django 6.x (Correção WhiteNoise aplicada)
 STORAGES = {
     # Controla o upload de mídias direto para o Cloudinary
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
-    # Controla o cache e compressão dos arquivos estáticos com o WhiteNoise
+    # Mudado para CompressedFilesStorage para ignorar arquivos fantasmas de idioma do admin
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedFilesStorage",
     },
 }
 
-# Regra de tolerância para o WhiteNoise (Impede falhas de build por falta de arquivos do Admin)
+# Regra de tolerância extra para o WhiteNoise
 WHITENOISE_MANIFEST_STRICT = False
 
 # Retrocompatibilidade exigida internamente pela biblioteca django-cloudinary-storage
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedFilesStorage"
