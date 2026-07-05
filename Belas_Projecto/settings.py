@@ -152,7 +152,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configurações de Armazenamento e Integrações (Cloudinary e Estáticos)
 
-# Credenciais do Cloudinary com leitura segura do ambiente e fallback para o seu local
+# 1. Definição explícita para a biblioteca base do Cloudinary (Evita o erro de Invalid cloud_name)
+import cloudinary
+cloudinary.config(
+    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
+    api_key = os.environ.get('CLOUDINARY_API_KEY', '752713951376889'),
+    api_secret = os.environ.get('CLOUDINARY_API_SECRET', 't3SnQ08x_jSQRrdNXPKO9xTzf6U'),
+    secure = True
+)
+
+# 2. Mantido para o pacote django-cloudinary-storage
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '752713951376889'),
