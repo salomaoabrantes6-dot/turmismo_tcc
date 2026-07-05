@@ -147,27 +147,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Credenciais da sua conta Cloudinary
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'Root',  # dados reais do Cloudinary
-    'API_KEY': '752713951376889',
-    'API_SECRET': 't3SnQ08x_jSQRrdNXPKO9xTzf6U',
-}
-
-# Configuração moderna e unificada de Armazenamento para o Django 6.x
-# Isso substitui completamente o antigo DEFAULT_FILE_STORAGE e previne conflitos
-STORAGES = {
-    # Controla o upload e leitura dos arquivos de mídia usando o Cloudinary
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    # Controla a compressão e cache dos arquivos estáticos com o WhiteNoise
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
-    },
-}
-
-# Credenciais do Cloudinary protegidas por variáveis de ambiente
+# Credenciais do Cloudinary protegidas por variáveis de ambiente (E com fallback seguro para local)
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '752713951376889'),
@@ -176,9 +156,11 @@ CLOUDINARY_STORAGE = {
 
 # Configuração moderna e unificada de Armazenamento para o Django 6.x
 STORAGES = {
+    # Controla o upload de mídias direto para o Cloudinary
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
+    # Controla o cache dos arquivos estáticos com o WhiteNoise
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
