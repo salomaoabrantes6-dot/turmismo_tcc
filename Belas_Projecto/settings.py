@@ -35,17 +35,22 @@ CSRF_TRUSTED_ORIGINS = ['https://api.ngrok.com']
 # Application definition
 
 INSTALLED_APPS = [
+    # O cloudinary_storage DEVE obrigatoriamente ficar acima do staticfiles
+    'cloudinary_storage',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Aplicações do seu TCC
     'Aplicativo_Belas',
     'pinel_administrativo',
     'global_models',
-    'cloudinary_storage',
-    'django.contrib.staticfiles',
+    
+    # Biblioteca base do Cloudinary
     'cloudinary',
 ]
 
@@ -54,7 +59,7 @@ AUTH_USER_MODEL = 'global_models.Usuario'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # <--- Inserido aqui para servir HTML/CSS/JS estáticos
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Servir HTML/CSS/JS estáticos em produção
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -114,7 +119,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
@@ -126,7 +130,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
@@ -136,32 +139,30 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Onde o Django busca os arquivos estáticos durante o desenvolvimento.
-# Apontando diretamente para dentro da pasta Aplicativo_Belas
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'Aplicativo_Belas', 'static'),
 ]
 
-# CORREÇÃO: Mantido CompressedStaticFilesStorage para o WhiteNoise
-# ignorar links quebrados ou caminhos suspeitos nos arquivos CSS externos durante o build.
+# Configurações de Mídia (Uploads de imagens)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Credenciais da sua conta Cloudinary
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'Root',  # dados reais do Cloudinary
+    'API_KEY': '752713951376889',
+    'API_SECRET': 't3SnQ08x_jSQRrdNXPKO9xTzf6U',
+}
+
+# Configuração moderna e unificada de Armazenamento para o Django 6.x
+# Isso substitui completamente o antigo DEFAULT_FILE_STORAGE e previne conflitos
 STORAGES = {
+    # Controla o upload e leitura dos arquivos de mídia usando o Cloudinary
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
+    # Controla a compressão e cache dos arquivos estáticos com o WhiteNoise
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
-
-# Configurações de Mídia (Uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# Configuração do Cloudinary para Armazenamento de Mídia
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'INSIRA_AQUI_O_SEU_CLOUD_NAME',
-    'API_KEY': 'INSIRA_AQUI_A_SUA_API_KEY',
-    'API_SECRET': 'INSIRA_AQUI_O_SUA_API_SECRET',
-}
-
-# Define o Cloudinary como o armazenador padrão de arquivos de mídia (Uploads)
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
