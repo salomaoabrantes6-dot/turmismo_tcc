@@ -166,3 +166,20 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
+
+# Credenciais do Cloudinary protegidas por variáveis de ambiente
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '752713951376889'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 't3SnQ08x_jSQRrdNXPKO9xTzf6U'),
+}
+
+# Configuração moderna e unificada de Armazenamento para o Django 6.x
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
