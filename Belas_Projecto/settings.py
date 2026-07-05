@@ -155,12 +155,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Configuração dupla e robusta de chaves (Maiúsculas para django-cloudinary-storage e minúsculas para uploader nativo)
 CLOUDINARY_STORAGE = {
     # Exigidas pelo django-cloudinary-storage
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'ma4psjce'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '173417643298899'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'uh94u-nBfgVQGq-f-qOm9eM008g'),
     
     # Exigidas pelo uploader interno (.uploader.py) em formulários com request.FILES
-    'cloud_name': os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
+    'cloud_name': os.environ.get('CLOUDINARY_CLOUD_NAME', 'ma4psjce'),
     'api_key': os.environ.get('CLOUDINARY_API_KEY', '173417643298899'),
     'api_secret': os.environ.get('CLOUDINARY_API_SECRET', 'uh94u-nBfgVQGq-f-qOm9eM008g'),
 }
