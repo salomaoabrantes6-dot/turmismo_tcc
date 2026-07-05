@@ -130,6 +130,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
@@ -143,28 +144,35 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'Aplicativo_Belas', 'static'),
 ]
 
+
 # Configurações de Mídia (Uploads de imagens)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Credenciais do Cloudinary protegidas por variáveis de ambiente (E com fallback seguro para local)
+
+# Configurações de Armazenamento e Integrações (Cloudinary e WhiteNoise)
+
+# Credenciais do Cloudinary com leitura segura do ambiente e fallback para o seu local
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '752713951376889'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 't3SnQ08x_jSQRrdNXPKO9xTzf6U'),
 }
 
-# Configuração moderna e unificada de Armazenamento para o Django 6.x
+# Configuração unificada de Backends para Django 6.x
 STORAGES = {
     # Controla o upload de mídias direto para o Cloudinary
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
-    # Controla o cache dos arquivos estáticos com o WhiteNoise
+    # Controla o cache e compressão dos arquivos estáticos com o WhiteNoise
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
-# LINHA DE COMPATIBILIDADE: Exigida pelo django-cloudinary-storage no Django 6.x
+# Regra de tolerância para o WhiteNoise (Impede falhas de build por falta de arquivos do Admin)
+WHITENOISE_MANIFEST_STRICT = False
+
+# Retrocompatibilidade exigida internamente pela biblioteca django-cloudinary-storage
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
