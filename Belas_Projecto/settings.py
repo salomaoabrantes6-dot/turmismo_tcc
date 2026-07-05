@@ -165,3 +165,6 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
+
+# LINHA DE COMPATIBILIDADE: Exigida pelo django-cloudinary-storage no Django 6.x
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
