@@ -152,21 +152,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configurações de Armazenamento e Integrações (Cloudinary e Estáticos)
 
-# 1. Definição explícita para a biblioteca base do Cloudinary (Evita o erro de Invalid cloud_name)
-import cloudinary
-cloudinary.config(
-    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
-    api_key = os.environ.get('CLOUDINARY_API_KEY', '173417643298899'),
-    api_secret = os.environ.get('CLOUDINARY_API_SECRET', 'uh94u-nBfgVQGq-f-qOm9eM008g'),
-    secure = True
-)
-
-# 2. Mantido para o pacote django-cloudinary-storage
+# Configuração dupla e robusta de chaves (Maiúsculas para django-cloudinary-storage e minúsculas para uploader nativo)
 CLOUDINARY_STORAGE = {
+    # Exigidas pelo django-cloudinary-storage
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '173417643298899'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'uh94u-nBfgVQGq-f-qOm9eM008g'),
+    
+    # Exigidas pelo uploader interno (.uploader.py) em formulários com request.FILES
+    'cloud_name': os.environ.get('CLOUDINARY_CLOUD_NAME', 'turismoImagens'),
+    'api_key': os.environ.get('CLOUDINARY_API_KEY', '173417643298899'),
+    'api_secret': os.environ.get('CLOUDINARY_API_SECRET', 'uh94u-nBfgVQGq-f-qOm9eM008g'),
 }
+
+# Inicialização direta da API nativa do Cloudinary com tratamento de fallbacks
+import cloudinary
+cloudinary.config(
+    cloud_name = CLOUDINARY_STORAGE['cloud_name'],
+    api_key = CLOUDINARY_STORAGE['api_key'],
+    api_secret = CLOUDINARY_STORAGE['api_secret'],
+    secure = True
+)
 
 # Configuração estável de Backends para Django 6.x
 STORAGES = {
