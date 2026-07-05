@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Aplicativo_Belas',
     'pinel_administrativo',
-    'global_models'
+    'global_models',
+    'cloudinary_storage',
+    'django.contrib.staticfiles',
+    'cloudinary',
 ]
 
 # Modelo personalizado de usuário do seu TCC
@@ -152,3 +155,13 @@ STORAGES = {
 # Configurações de Mídia (Uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Configuração do Cloudinary para Armazenamento de Mídia
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'INSIRA_AQUI_O_SEU_CLOUD_NAME',
+    'API_KEY': 'INSIRA_AQUI_A_SUA_API_KEY',
+    'API_SECRET': 'INSIRA_AQUI_O_SUA_API_SECRET',
+}
+
+# Define o Cloudinary como o armazenador padrão de arquivos de mídia (Uploads)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
