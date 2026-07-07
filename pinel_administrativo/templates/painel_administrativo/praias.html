@@ -215,6 +215,12 @@
         </div>
     </div>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mensagem_django">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
     <script>
         // ===== VERIFICAR TEMA AO CARREGAR (DEPENDENTE DA DASHBOARD) =====
         function checkAndApplyTheme() {

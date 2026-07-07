@@ -8,7 +8,6 @@ from global_models.models import praias
 from django.contrib.auth.decorators import login_required
 from global_models.models import Depoimento
 from django.db.models import Count
-from bs4 import BeautifulSoup
 # Create your views here.
 
 def is_superuser(user):

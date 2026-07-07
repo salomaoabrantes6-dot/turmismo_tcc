@@ -727,3 +727,44 @@ button {
         padding: 1.25rem;
     }
 }
+
+.mensagem_django {
+    color: aliceblue;
+    position: absolute;
+    top: 80%;
+    right: 5%;
+    background: #01412c;
+    padding: 1%;
+    font-weight: bolder;
+    border-radius: 10px;
+    opacity: 0;
+    transition: all 1s ease-in-out;
+    animation: aparecer 2s ease-in-out;
+}
+
+@keyframes aparecer {
+    0% {
+        opacity: 0;
+        transform: translateX(10pc);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(10pc);
+    }
+}

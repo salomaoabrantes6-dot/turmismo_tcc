@@ -171,6 +171,13 @@ document.getElementById('feedbackForm').addEventListener('submit', function (e) 
     showToast('Por favor, selecione uma avaliação de 1 a 5 estrelas.');
     starContainer.scrollIntoView({ behavior: 'smooth' });
   }
+
+  else{
+    showToast('Obrigado pelo seu Depoimento!.');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 5000);
+  }
 });
 
 // ===== CARROSSEL DE FEEDBACKS =====

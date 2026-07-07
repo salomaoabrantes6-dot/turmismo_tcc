@@ -31,6 +31,10 @@ def index(request):
             image_url=url,
             image_file=arquivo
         )
+        
+       
+        messages.success(request, 'Obrigado pelo seu depoimento!')
+        return redirect('index')
     
     return render(request, 'index.html', {'pontos': pontos, 'praias_belas': praias_belas, 'depoimentos': depoimentos }) 
 
