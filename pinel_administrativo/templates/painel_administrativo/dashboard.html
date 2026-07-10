@@ -424,16 +424,53 @@ body {
         padding: 1rem;
     }
 
+    /* Transformação Completa da Tabela em blocos (divs) no celular */
     .data-table {
         display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        box-shadow: none;
+        background: transparent;
     }
 
-    .data-table th,
+    .data-table thead {
+        display: none; /* Esconde cabeçalho padrão */
+    }
+
+    .data-table tbody {
+        display: block;
+    }
+
+    .data-table tr {
+        display: block;
+        background: var(--bg-card);
+        margin-bottom: 1rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+    }
+
     .data-table td {
-        padding: 0.75rem;
-        font-size: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px dashed var(--border-color);
+        white-space: normal;
+        font-size: 0.9rem;
+    }
+
+    .data-table td:last-child {
+        border-bottom: none;
+        padding-top: 1rem;
+        justify-content: flex-start;
+    }
+
+    /* Rótulos para identificar os dados em formato de bloco */
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-right: 1rem;
     }
 }
 
@@ -450,6 +487,13 @@ body {
     
 </head>
 <body class='body_index'>
+    <!-- Bloqueador Antiflashing Estrutural -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+
     <!-- Overlay para mobile -->
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
@@ -467,7 +511,7 @@ body {
                     <a href="{% url 'dashboard' %}" class="active">
                         <i class="fas fa-chart-pie"></i> Dashboard
                     </a>
-                </li>
+                </td>
                 <li>
                     <a href="{% url 'pontos_turisticos' %}">
                         <i class="fas fa-map-marker-alt"></i> Pontos Turísticos
@@ -571,7 +615,7 @@ body {
                         Feedbacks Recentes
                     </h2>
 
-                    <div style="overflow-x: auto;">
+                    <div style="width: 100%;">
                         <table class="data-table">
                             <thead>
                                 <tr>
@@ -586,7 +630,7 @@ body {
                             <tbody id="feedbacks-table">
                                 {% for feedback in depoimentos %}
                                 <tr>
-                                    <td>
+                                    <td data-label="Imagem">
                                         {% if feedback.image_file %}
                                         <img src="{{ feedback.image_file.url }}" 
                                              width="60" 
@@ -594,11 +638,11 @@ body {
                                              style="border-radius: 10px; object-fit: cover;">
                                         {% endif %}
                                     </td>
-                                    <td>{{ feedback.nome }}</td>
-                                    <td>{{ feedback.mensagem }}</td>
-                                    <td>{{ feedback.data_criacao }}</td>
-                                    <td>{{ feedback.nota }}</td>
-                                    <td>
+                                    <td data-label="Nome">{{ feedback.nome }}</td>
+                                    <td data-label="Mensagem">{{ feedback.mensagem }}</td>
+                                    <td data-label="Data">{{ feedback.data_criacao }}</td>
+                                    <td data-label="Nota">{{ feedback.nota }}</td>
+                                    <td data-label="Ações">
                                         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                                             
                                             <a href="{% url 'acao_depoimento' feedback.id 'eliminar' %}" class="btn-eliminar" onclick="return confirm('Deseja realmente excluir o depoimento de {{ feedback.nome }}? Esta ação é irreversível.');">
@@ -651,14 +695,14 @@ body {
             }
         }
 
-        // Carregar tema salvo
-        function loadTheme() {
+        // Sincroniza o ícone do botão com o tema injetado no início
+        function syncThemeIcon() {
             const savedTheme = localStorage.getItem('theme');
             const themeToggle = document.getElementById('theme-toggle');
+            if (!themeToggle) return;
             const icon = themeToggle.querySelector('i');
             
             if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
             }
@@ -677,7 +721,7 @@ body {
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
-            loadTheme();
+            syncThemeIcon();
             
             // Marcar link ativo na sidebar baseado na URL
             const currentPath = window.location.pathname;
