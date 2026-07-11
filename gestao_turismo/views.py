@@ -37,7 +37,7 @@ def dashboard(request):
         praias_belas.exclude(imagem_praia='').count()
     )
     
-    return render(request, 'painel_administrativo/dashboard.html', {
+    return render(request, 'gestao_turismo/dashboard.html', {
         'depoimentos': depoimentos,
         'total_depoimentos': total_depoimentos,
         'total_ponto': total_ponto,
@@ -45,90 +45,6 @@ def dashboard(request):
         'praias_belas': praias_belas,
         'total_imagens': total_imagens,
     })    
-
-@login_required
-@user_passes_test(lambda u: u.is_superuser, login_url='admin:login')
-def usuarios(request):
-    if request.method == 'POST':
-        action = request.POST.get('action')
-        
-        # Lógica para criar novo admin
-        if action == 'create':
-            form = CriarAdminForm(request.POST)
-            if form.is_valid():
-                nome = form.cleaned_data['nome_completo']
-                email = form.cleaned_data['email']
-                telefone = form.cleaned_data.get('telefone', '')
-                senha = form.cleaned_data['senha']
-                tipo = form.cleaned_data['tipo']
-
-                user = Usuario.objects.create_user(
-                    email=email,
-                    password=senha,
-                    nome_completo=nome,
-                    telefone=telefone,
-                    tipo=tipo,
-                    criado_por=request.user
-                )
-                
-                tipo_display = dict(Usuario.TipoUsuario.choices).get(tipo)
-                messages.success(request, f'{tipo_display} {email} criado com sucesso!')
-                return redirect('usuarios')
-            else:
-                messages.error(request, 'Erro ao criar usuário. Verifique os dados.')
-        
-        # Lógica para gerenciar admins (ativar/desativar/excluir)
-        elif action in ['toggle_active', 'delete']:
-            user_id = request.POST.get('user_id')
-            
-            try:
-                user = Usuario.objects.get(
-                    pk=user_id, 
-                    is_staff=True, 
-                    excluido=False
-                )
-            except Usuario.DoesNotExist:
-                messages.error(request, 'Usuário não encontrado.')
-                return redirect('usuarios')
-
-            # Impede auto-alteração
-            if user == request.user and action in ['delete', 'toggle_active']:
-                messages.error(request, 'Você não pode alterar seu próprio status.')
-                return redirect('usuarios')
-
-            if action == 'toggle_active':
-                if user.ativo:
-                    user.inativar()
-                    messages.success(request, f'Usuário {user.email} foi inativado.')
-                else:
-                    user.ativar()
-                    messages.success(request, f'Usuário {user.email} foi ativado.')
-
-            elif action == 'delete':
-                user.soft_delete(user=request.user)
-                messages.success(request, f'Usuário {user.email} foi excluído.')
-
-            return redirect('usuarios')
-    
-    # GET - Exibe a página
-    else:
-        form = CriarAdminForm()
-        
-        # Busca todos os admins (não excluídos)
-        all_users = Usuario.objects.filter(
-            is_staff=True, 
-            excluido=False
-        ).order_by('-data_criacao')
-        
-        contexto = {
-            'form': form,
-            'all_users': all_users,
-            'tipos_usuario': dict(Usuario.TipoUsuario.choices),
-        }
-        
-        return render(request, 'painel_administrativo/user.html', contexto)
-
-    
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -176,7 +92,7 @@ def pontos_turisticos(request, pk=None):
             messages.error(request, f'Erro de validação no formulário: {form.errors}')
 
     pontos = PontoTuristico.objects.all()
-    return render(request, 'painel_administrativo/pontos_turisticos.html', {
+    return render(request, 'gestao_turismo/pontos_turisticos.html', {
         'form': form, 
         'pontos': pontos, 
         'pk': pk
@@ -227,7 +143,7 @@ def praiasBelas(request, pk=None):
     praias_belas = praias.objects.all()
     praias_belas_total = praias.objects.count()
     
-    return render(request, 'painel_administrativo/praias.html', {
+    return render(request, 'gestao_turismo/praias.html', {
         'form': form,
         'praias_belas': praias_belas,
         'pk': pk,
