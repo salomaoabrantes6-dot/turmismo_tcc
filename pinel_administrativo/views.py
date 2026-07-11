@@ -151,7 +151,7 @@ from .forms import PontoTuristicoForm, praiasForm
 # GESTÃO DE PONTOS TURÍSTICOS
 # -----------------------------------------------------------------------------
 @login_required
-def pontos_turisticos(request, pk=None):
+def atrativos_turisticos(request, pk=None):
     """
     CRUD em uma página: se pk é passado, editamos, senão criamos.
     Protegido contra Internal Server Error (500).
@@ -167,7 +167,7 @@ def pontos_turisticos(request, pk=None):
             try:
                 form.save()
                 messages.success(request, 'Ponto turístico guardado com sucesso!')
-                return redirect('pontos_turisticos')
+                return redirect('atrativos_turisticos')
             except Exception as e:
                 # Captura erros de banco de dados (ex: integridade, colunas nulas, caminhos de arquivo)
                 messages.error(request, f'Erro interno ao gravar no banco de dados: {e}')
@@ -195,7 +195,7 @@ def deletar_ponto(request, pk):
             messages.success(request, 'Ponto turístico eliminado com sucesso.')
         except Exception as e:
             messages.error(request, f'Não foi possível eliminar o ponto turístico: {e}')
-    return redirect('pontos_turisticos')
+    return redirect('atrativos_turisticos')
 
 
 # -----------------------------------------------------------------------------
@@ -218,7 +218,7 @@ def praiasBelas(request, pk=None):
             try:
                 form.save()
                 messages.success(request, 'Dados da praia guardados com sucesso!')
-                return redirect('praias')
+                return redirect('praiasBelas')
             except Exception as e:
                 messages.error(request, f'Erro interno ao gravar a praia no banco: {e}')
         else:
@@ -247,7 +247,7 @@ def deletar_praia(request, pk):
             messages.success(request, 'Praia eliminada com sucesso.')
         except Exception as e:
             messages.error(request, f'Não foi possível eliminar a praia: {e}')
-    return redirect('praias')
+    return redirect('praiasBelas')
     
 #Deletar depoimento
 

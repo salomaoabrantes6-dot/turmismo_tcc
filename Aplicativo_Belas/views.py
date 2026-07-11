@@ -60,7 +60,7 @@ def login_view(request):
                 return redirect('/admin/')  # Redireciona com sucesso para o painel administrativo
             
             elif user.tipo == user.TipoUsuario.ADMIN:
-                return redirect('/gestao_turistica/')
+                return redirect('/gestao_turistico/')
             else:
                 messages.error(request, 'Acesso negado: Esta conta não tem permissões de Superusuário.')
         else:

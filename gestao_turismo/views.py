@@ -16,7 +16,7 @@ def is_superuser_or_admin(user):
 @login_required
 @user_passes_test(is_superuser_or_admin, login_url='/gestao_turismo/login/')
 
-def dashboard(request):
+def dash_board(request):
     depoimentos = Depoimento.objects.all()
     total_depoimentos = Depoimento.objects.count()
     pontos = PontoTuristico.objects.all()
@@ -134,7 +134,7 @@ def praiasBelas(request, pk=None):
             try:
                 form.save()
                 messages.success(request, 'Dados da praia guardados com sucesso!')
-                return redirect('praias')
+                return redirect('praiasBelas')
             except Exception as e:
                 messages.error(request, f'Erro interno ao gravar a praia no banco: {e}')
         else:
@@ -163,7 +163,7 @@ def deletar_praia(request, pk):
             messages.success(request, 'Praia eliminada com sucesso.')
         except Exception as e:
             messages.error(request, f'Não foi possível eliminar a praia: {e}')
-    return redirect('praias')
+    return redirect('praiasBelas')
     
 #Deletar depoimento
 
@@ -175,7 +175,7 @@ def acao_depoimento(request, id, acao):
     elif acao == 'eliminar':
         depoimento.delete()
     
-    return redirect('dashboard')
+    return redirect('dash_board')
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
