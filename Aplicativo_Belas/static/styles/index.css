@@ -1,4 +1,4 @@
-/* ===== VARIÁVEIS DE TEMA ===== */
+ /* ===== VARIÁVEIS DE TEMA ===== */
 :root {
     --primary: #B8860B;
     --primary-light: #D4A72C;
@@ -398,6 +398,47 @@ section {
     margin-bottom: 1rem;
 }
 
+/* ===== ROTEIROS ===== */
+.roteiro-card {
+    padding: 1.5rem;
+}
+.roteiro-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+.roteiro-header i {
+    font-size: 1.8rem;
+    color: var(--primary-light);
+    margin-bottom: 0;
+}
+.roteiro-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+.badge {
+    background: var(--primary-light);
+    color: #fff;
+    padding: 0.2rem 1rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.roteiro-info p {
+    margin: 0.3rem 0;
+    color: var(--text-secondary);
+}
+.roteiro-info .descricao {
+    margin-top: 0.5rem;
+    font-style: italic;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 0.5rem;
+}
+
 /* ===== FEEDBACK ITEM ===== */
 .feedback-item {
     background: var(--feedback-bg, #fffbeb);
@@ -406,17 +447,18 @@ section {
     border-right: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
     border-radius: var(--radius-xl);
-    padding: 1.5rem;
+    padding: 1.5rem 1.8rem;
     box-shadow: var(--shadow-card);
     transition: all var(--transition-smooth);
     position: relative;
     overflow: hidden;
     animation: fadeInUp 0.5s ease backwards;
-    min-width: 320px;
-    max-width: 380px;
+    min-width: 300px;
+    max-width: 400px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
+    height: auto !important;
 }
 
 .feedback-item:hover {
@@ -509,12 +551,16 @@ section {
 
 .feedback-message {
     color: var(--text-secondary);
-    margin: 0.75rem 0;
+    margin: 0.5rem 0;
     line-height: 1.7;
     font-style: italic;
     position: relative;
     padding-left: 1.5rem;
-    flex: 1;
+    flex: 1 1 auto;
+    overflow: visible;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-height: none;
 }
 
 .feedback-message::before {
@@ -527,6 +573,10 @@ section {
     font-style: normal;
     line-height: 1;
     opacity: 0.6;
+}
+
+.feedback-message p {
+    margin: 0;
 }
 
 /* ===== CARROSSEL DE FEEDBACKS ===== */
@@ -547,6 +597,7 @@ section {
     gap: 1.5rem;
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     will-change: transform;
+    align-items: stretch;
 }
 
 .carousel-btn {
@@ -1521,6 +1572,7 @@ button {
     .feedback-item {
         min-width: 280px;
         max-width: 320px;
+        padding: 1.2rem;
     }
 
     .carousel-btn {
@@ -1541,6 +1593,15 @@ button {
 
     .modal-fullscreen-body h2 {
         font-size: 1.5rem;
+    }
+
+    .feedback-item {
+        min-width: 260px;
+        max-width: 300px;
+        padding: 1.2rem;
+    }
+    .feedback-message {
+        font-size: 0.9rem;
     }
 }
 
@@ -1565,7 +1626,8 @@ button {
     }
 
     .feedback-item {
-        min-width: 260px;
-        max-width: 280px;
+        min-width: 240px;
+        max-width: 260px;
+        padding: 1rem;
     }
 }

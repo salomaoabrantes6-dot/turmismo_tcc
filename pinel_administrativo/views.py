@@ -201,38 +201,49 @@ def deletar_ponto(request, pk):
 # -----------------------------------------------------------------------------
 # GESTÃO DE PRAIAS
 # -----------------------------------------------------------------------------
+
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+
 @login_required
 def praiasBelas(request, pk=None):
-    """
-    CRUD de praias em uma única página.
-    Protegido contra falhas críticas de salvamento.
-    """
+    # Busca a instância se pk for fornecido
     if pk:
-        praia = get_object_or_404(praias, pk=pk)
+        praia = get_object_or_404(Praia, pk=pk)  # ajusta o nome do modelo
         form = praiasForm(request.POST or None, request.FILES or None, instance=praia)
     else:
+        praia = None
         form = praiasForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST':
         if form.is_valid():
             try:
-                form.save()
-                messages.success(request, 'Dados da praia guardados com sucesso!')
-                return redirect('praiasBelas')
+                obj = form.save()
+                messages.success(request, 'Dados guardados com sucesso!')
+                # Redireciona para a lista (ou para a edição se quiseres)
+                return redirect('praias_belas')  # ou redirect('praias_belas', pk=obj.pk)
             except Exception as e:
-                messages.error(request, f'Erro interno ao gravar a praia no banco: {e}')
+                messages.error(request, f'Erro ao guardar: {e}')
         else:
-            messages.error(request, f'Erro de validação no formulário da praia: {form.errors}')
+            # Mostra erros de forma legível
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+            # Opcional: log no terminal
+            print(form.errors)
 
-    praias_belas = praias.objects.all()
-    praias_belas_total = praias.objects.count()
-    
-    return render(request, 'painel_administrativo/praias.html', {
+    # Busca todos os registos para a listagem
+    praias_list = Praia.objects.all()
+    total = praias_list.count()
+
+    context = {
         'form': form,
-        'praias_belas': praias_belas,
+        'praias_belas': praias_list,
         'pk': pk,
-        'praias_belas_total': praias_belas_total,
-    })
+        'praias_belas_total': total,
+    }
+    return render(request, 'praia_administrativo/praias.html', context)
 
 
 @login_required

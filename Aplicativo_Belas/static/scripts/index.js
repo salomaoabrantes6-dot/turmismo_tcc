@@ -40,7 +40,6 @@ function closeImageLightbox() {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeImageLightbox();
-    // Fechar modais fullscreen
     document.querySelectorAll('.modal-fullscreen.active').forEach(modal => {
       modal.classList.remove('active');
     });
@@ -53,7 +52,6 @@ function openFullscreenModal(modalId) {
   const modal = document.getElementById(modalId);
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
-  // Scroll para o topo do modal
   setTimeout(() => {
     const content = modal.querySelector('.modal-fullscreen-content');
     if (content) content.scrollTop = 0;
@@ -170,9 +168,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function (e) 
     e.preventDefault();
     showToast('Por favor, selecione uma avaliação de 1 a 5 estrelas.');
     starContainer.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  else{
+  } else {
     showToast('Obrigado pelo seu Depoimento!.');
     setTimeout(() => {
       toast.classList.remove('show');
@@ -227,9 +223,10 @@ function initFeedbackCarousel() {
 
   function updateCarousel() {
     const itemWidth = items[0].offsetWidth;
-    const gap = 24; // 1.5rem gap
+    const gap = 24;
     const offset = currentIndex * itemsPerView * (itemWidth + gap);
     track.style.transform = `translateX(-${offset}px)`;
+    container.style.height = 'auto';
 
     prevBtn.disabled = currentIndex === 0;
     nextBtn.disabled = currentIndex >= totalPages - 1;
@@ -272,13 +269,11 @@ function initFeedbackCarousel() {
   function handleSwipe() {
     const swipeThreshold = 50;
     if (touchStartX - touchEndX > swipeThreshold) {
-      // Swipe left - next
       if (currentIndex < totalPages - 1) {
         currentIndex++;
         updateCarousel();
       }
     } else if (touchEndX - touchStartX > swipeThreshold) {
-      // Swipe right - prev
       if (currentIndex > 0) {
         currentIndex--;
         updateCarousel();
@@ -303,5 +298,4 @@ function initFeedbackCarousel() {
 
 // Inicializar carrossel quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', initFeedbackCarousel);
-// Também inicializar após carregamento completo (para imagens)
 window.addEventListener('load', initFeedbackCarousel);
