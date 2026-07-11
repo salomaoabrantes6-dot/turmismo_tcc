@@ -107,6 +107,8 @@ class praias(models.Model):
     )
         localizacao_ponto = models.CharField(
         max_length=300,
+	blank=True,
+	null=True,
         verbose_name="Localização (cidade, bairro, endereço completo)"
     )
         

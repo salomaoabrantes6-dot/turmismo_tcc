@@ -11,7 +11,7 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../static/styles/praias.css">
+    <link rel="stylesheet" href="{% static 'styles/praias.css' %}">
 
     
 </head>
@@ -92,7 +92,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" enctype="multipart/form-data" action="{% url 'praias' %}">
+                                <form method="POST" enctype="multipart/form-data" action="{% url 'praiasBelas' %}">
                                     {% csrf_token %}
                                     {{ form.as_p }}
                                     <div class="modal-footer" style="padding: 0; border: none; margin-top: 1.5rem;">

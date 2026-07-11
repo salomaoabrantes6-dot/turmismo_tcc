@@ -14,7 +14,7 @@ def is_superuser_or_admin(user):
     return user.is_authenticated and user.is_staff
 
 @login_required
-@user_passes_test(is_superuser_or_admin, login_url='/gestao_turismo/login/')
+@user_passes_test(is_superuser_or_admin, login_url='/Aplicativo_Belas/login/')
 
 def dash_board(request):
     depoimentos = Depoimento.objects.all()
@@ -44,7 +44,8 @@ def dash_board(request):
         'pontos': pontos,
         'praias_belas': praias_belas,
         'total_imagens': total_imagens,
-    })    
+    })
+    
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -111,45 +112,54 @@ def deletar_ponto(request, pk):
             messages.success(request, 'Ponto turístico eliminado com sucesso.')
         except Exception as e:
             messages.error(request, f'Não foi possível eliminar o ponto turístico: {e}')
-    return redirect('pontos_turisticos')
+    return redirect('atrativos_turisticos')
 
 
 # -----------------------------------------------------------------------------
 # GESTÃO DE PRAIAS
 # -----------------------------------------------------------------------------
+
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+
 @login_required
-def praiasBelas(request, pk=None):
-    """
-    CRUD de praias em uma única página.
-    Protegido contra falhas críticas de salvamento.
-    """
+def praias_de_belas(request, pk=None):
+    # Instancia o formulário conforme haja ou não pk
     if pk:
         praia = get_object_or_404(praias, pk=pk)
         form = praiasForm(request.POST or None, request.FILES or None, instance=praia)
     else:
+        praia = None
         form = praiasForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST':
+        # O formulário já foi instanciado com os dados POST, agora valida
         if form.is_valid():
             try:
-                form.save()
-                messages.success(request, 'Dados da praia guardados com sucesso!')
-                return redirect('praiasBelas')
+                obj = form.save()
+                messages.success(request, 'Dados guardados com sucesso!')
+                return redirect('praias')  # redireciona para a lista
             except Exception as e:
-                messages.error(request, f'Erro interno ao gravar a praia no banco: {e}')
+                messages.error(request, f'Erro ao guardar: {e}')
         else:
-            messages.error(request, f'Erro de validação no formulário da praia: {form.errors}')
+            # Mostra erros campo a campo
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+            print(form.errors)  # log opcional
 
-    praias_belas = praias.objects.all()
-    praias_belas_total = praias.objects.count()
-    
-    return render(request, 'gestao_turismo/praias.html', {
+    # Busca todos os registos para exibir na lista
+    praias_list = praias.objects.all()
+    total = praias_list.count()
+
+    context = {
         'form': form,
-        'praias_belas': praias_belas,
+        'praias_belas': praias_list,
         'pk': pk,
-        'praias_belas_total': praias_belas_total,
-    })
-
+        'praias_belas_total': total,
+    }
+    return render(request, 'gestao_turismo/praias.html', context)
 
 @login_required
 def deletar_praia(request, pk):
@@ -177,9 +187,13 @@ def acao_depoimento(request, id, acao):
     
     return redirect('dash_board')
 
+ 
+# Views de criacao de usuario
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
 from django.contrib import messages
-
+from global_models.models import Usuario
+from .forms import CriarAdminForm
 
 
 

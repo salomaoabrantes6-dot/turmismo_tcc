@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.dash_board, name='dash_board'),
     path('pontos_turisticos/', views.pontos_turisticos, name='pontos_turisticos'),
-    path("praiasBelas/", views.praiasBelas, name="praias"),
+    path("praias_de_belas/", views.praias_de_belas, name="praias"),
     
     path('logout_view/', views.logout_view, name='logout_view'),
     
@@ -12,7 +12,7 @@ urlpatterns = [
     path('deletar_praia/deletar/<int:pk>/', views.deletar_praia, name='deletar_praia'),
     
     path('pontos_turisticos/<str:pk>/', views.pontos_turisticos, name='pontos_turisticos_editar'),
-    path('praiasBelas/<str:pk>/', views.praiasBelas, name='praiasBelas_editar'),
+    path('praias_de_belas/<str:pk>/', views.praias_de_belas, name='praias_de_belas_editar'),
     
     path('moderacao/<int:id>/<str:acao>/', views.acao_depoimento, name='acao_depoimento'),
     

@@ -208,32 +208,31 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def praiasBelas(request, pk=None):
-    # Busca a instância se pk for fornecido
+    # Instancia o formulário conforme haja ou não pk
     if pk:
-        praia = get_object_or_404(Praia, pk=pk)  # ajusta o nome do modelo
+        praia = get_object_or_404(praias, pk=pk)
         form = praiasForm(request.POST or None, request.FILES or None, instance=praia)
     else:
         praia = None
         form = praiasForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST':
+        # O formulário já foi instanciado com os dados POST, agora valida
         if form.is_valid():
             try:
                 obj = form.save()
                 messages.success(request, 'Dados guardados com sucesso!')
-                # Redireciona para a lista (ou para a edição se quiseres)
-                return redirect('praiasBelas')  # ou redirect('praias_belas', pk=obj.pk)
+                return redirect('praiasBelas')  # redireciona para a lista
             except Exception as e:
                 messages.error(request, f'Erro ao guardar: {e}')
         else:
-            # Mostra erros de forma legível
+            # Mostra erros campo a campo
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f'{field}: {error}')
-            # Opcional: log no terminal
-            print(form.errors)
+            print(form.errors)  # log opcional
 
-    # Busca todos os registos para a listagem
+    # Busca todos os registos para exibir na lista
     praias_list = praias.objects.all()
     total = praias_list.count()
 
@@ -244,7 +243,6 @@ def praiasBelas(request, pk=None):
         'praias_belas_total': total,
     }
     return render(request, 'painel_administrativo/praias.html', context)
-
 
 @login_required
 def deletar_praia(request, pk):

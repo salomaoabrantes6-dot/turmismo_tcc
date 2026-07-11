@@ -94,7 +94,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{% url 'pontos_turisticos' %}" method="POST" enctype="multipart/form-data">
+                                <form action="{% url 'atrativos_turisticos' %}" method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     {{form.as_p}}
                                     <div class="modal-footer" style="padding: 0; border: none; margin-top: 1.5rem;">
@@ -118,7 +118,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{% url 'pontos_turisticos_editar' ponto.id %}" method="POST" enctype="multipart/form-data">
+                                <form action="{% url 'atrativos_turisticos_editar' ponto.id %}" method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     
                                     <h4 style="margin-bottom: 1rem; color: var(--nature-green);">📍 Informações do Ponto</h4>
