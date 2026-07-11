@@ -411,16 +411,53 @@ body {
         padding: 1rem;
     }
 
+    /* Transformação Completa da Tabela em blocos (divs) no celular */
     .data-table {
         display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        box-shadow: none;
+        background: transparent;
     }
 
-    .data-table th,
+    .data-table thead {
+        display: none; /* Esconde cabeçalho padrão */
+    }
+
+    .data-table tbody {
+        display: block;
+    }
+
+    .data-table tr {
+        display: block;
+        background: var(--bg-card);
+        margin-bottom: 1rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+    }
+
     .data-table td {
-        padding: 0.75rem;
-        font-size: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px dashed var(--border-color);
+        white-space: normal;
+        font-size: 0.9rem;
+    }
+
+    .data-table td:last-child {
+        border-bottom: none;
+        padding-top: 1rem;
+        justify-content: flex-start;
+    }
+
+    /* Rótulos para identificar os dados em formato de bloco */
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-right: 1rem;
     }
 }
 

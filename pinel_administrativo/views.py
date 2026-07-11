@@ -10,11 +10,11 @@ from global_models.models import Depoimento
 from django.db.models import Count
 # Create your views here.
 
-def is_superuser(user):
-    return user.is_authenticated and user.is_superuser
+def is_superuser_or_admin(user):
+    return user.is_authenticated and user.is_staff
 
 @login_required
-@user_passes_test(is_superuser, login_url='/Aplicativo_Belas/login/')
+@user_passes_test(is_superuser_or_admin, login_url='/Aplicativo_Belas/login/')
 
 def dashboard(request):
     depoimentos = Depoimento.objects.all()
@@ -231,7 +231,7 @@ def praiasBelas(request, pk=None):
         'form': form,
         'praias_belas': praias_belas,
         'pk': pk,
-        'praias_belas_total': praias_belas_total
+        'praias_belas_total': praias_belas_total,
     })
 
 

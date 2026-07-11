@@ -13,13 +13,8 @@ urlpatterns = [
     path('deletar_praia/deletar/<int:pk>/', views.deletar_praia, name='deletar_praia'),
     
     path('pontos_turisticos/<str:pk>/', views.pontos_turisticos, name='pontos_turisticos_editar'),
-    path('praiasBelas/<str:pk>/', views.pontos_turisticos, name='praiasBelas_editar'),
+    path('praiasBelas/<str:pk>/', views.praiasBelas, name='praiasBelas_editar'),
     
     path('moderacao/<int:id>/<str:acao>/', views.acao_depoimento, name='acao_depoimento'),
     
 ]
-
-
-# appAdmin/urls.py
-
-# appAdmin/urls.py

@@ -45,8 +45,7 @@ def ladingPage(request):
     
 
 def login_view(request):
-    if request.user.is_authenticated and request.user.is_superuser:
-        return redirect('/admin/') # Se já estiver logado, vai direto para o painel
+    # Se já estiver logado, vai direto para o painel
         
     if request.method == 'POST': 
         email = request.POST.get('email')
@@ -56,9 +55,12 @@ def login_view(request):
         user = authenticate(request, username=email, password=password)
             
         if user is not None:
-            if user.is_superuser:
-                auth_login(request, user)
+            auth_login(request, user)
+            if user.tipo == user.TipoUsuario.SUPER_ADMIN:
                 return redirect('/admin/')  # Redireciona com sucesso para o painel administrativo
+            
+            elif user.tipo == user.TipoUsuario.ADMIN:
+                return redirect('/admin/')
             else:
                 messages.error(request, 'Acesso negado: Esta conta não tem permissões de Superusuário.')
         else:
