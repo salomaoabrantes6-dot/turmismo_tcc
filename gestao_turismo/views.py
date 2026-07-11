@@ -14,7 +14,7 @@ def is_superuser_or_admin(user):
     return user.is_authenticated and user.is_staff
 
 @login_required
-@user_passes_test(is_superuser_or_admin, login_url='/Aplicativo_Belas/login/', login_url='/gestao_turismo/login/')
+@user_passes_test(is_superuser_or_admin, login_url='/gestao_turismo/login/')
 
 def dashboard(request):
     depoimentos = Depoimento.objects.all()
@@ -177,13 +177,9 @@ def acao_depoimento(request, id, acao):
     
     return redirect('dashboard')
 
- 
-# Views de criacao de usuario
-from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from global_models.models import Usuario
-from .forms import CriarAdminForm
+
 
 
 

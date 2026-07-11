@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'Aplicativo_Belas',
     'pinel_administrativo',
     'global_models',
-    'gestao_turismo'
+    'gestao_turismo',
     
     # Biblioteca base do Cloudinary
     'cloudinary',
