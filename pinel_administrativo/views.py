@@ -222,7 +222,7 @@ def praiasBelas(request, pk=None):
                 obj = form.save()
                 messages.success(request, 'Dados guardados com sucesso!')
                 # Redireciona para a lista (ou para a edição se quiseres)
-                return redirect('praias_belas')  # ou redirect('praias_belas', pk=obj.pk)
+                return redirect('praiasBelas')  # ou redirect('praias_belas', pk=obj.pk)
             except Exception as e:
                 messages.error(request, f'Erro ao guardar: {e}')
         else:
@@ -234,7 +234,7 @@ def praiasBelas(request, pk=None):
             print(form.errors)
 
     # Busca todos os registos para a listagem
-    praias_list = Praia.objects.all()
+    praias_list = praias.objects.all()
     total = praias_list.count()
 
     context = {
@@ -243,7 +243,7 @@ def praiasBelas(request, pk=None):
         'pk': pk,
         'praias_belas_total': total,
     }
-    return render(request, 'praia_administrativo/praias.html', context)
+    return render(request, 'painel_administrativo/praias.html', context)
 
 
 @login_required
