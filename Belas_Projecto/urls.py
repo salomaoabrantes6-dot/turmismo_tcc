@@ -23,6 +23,7 @@ urlpatterns = [
     #path('admin/', admin.site.urls),
     path('', include('Aplicativo_Belas.urls')),
     path('admin/', include('pinel_administrativo.urls')),
+    path('gestao_turistica/', include('gestao_turismo.urls')),
 ]
 
 if settings.DEBUG:
