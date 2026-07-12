@@ -11,10 +11,10 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'styles/praias.css' %}">
+    <link rel="stylesheet" href="../../static/styles/praias.css">
 
 <style>
-	.mensagem_django {
+    .mensagem_django {
     color: aliceblue;
     position: absolute;
     top: 80%;
@@ -267,11 +267,6 @@
     {% endif %}
 
     <script>
-	setTimeout(function() {
-		var msgs = document.querySelectorAll('.mensagem_django');
-		msgs.forEach(function(el) {el.style.display='none';}
-	}, 3000);
-
         // ===== VERIFICAR TEMA AO CARREGAR (DEPENDENTE DA DASHBOARD) =====
         function checkAndApplyTheme() {
             // Usa a mesma chave 'theme' da dashboard
