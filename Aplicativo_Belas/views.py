@@ -1,14 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 
 # Create your views here.
 # appPublico/views.py
-from django.shortcuts import render
 from global_models.models import PontoTuristico
 from global_models.models import praias
-from django.shortcuts import render, redirect, get_object_or_404
 from global_models.models import Depoimento
 
 def index(request):

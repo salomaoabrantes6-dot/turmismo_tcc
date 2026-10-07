@@ -9,7 +9,7 @@ application = get_wsgi_application()
 try:
     from global_models.models import Usuario
     
-    email_admin = 'admin@email.com'
+    email_admin = 'admin@gmail.com'
     senha_admin = '123456'
     
     # 1. Se não existir, cria. Se existir, não faz nada aqui.

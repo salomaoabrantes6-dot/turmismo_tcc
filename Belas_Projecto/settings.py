@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'Belas_Projecto.wsgi.application'
 # Caso contrário (ambiente local), ele usa os dados do seu banco PostgreSQL local 'banco_turismo_belas'.
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://postgres:0000@localhost:6126/banco_turismo_belas',
+        default='postgres://postgres:0000@localhost:5432/banco_turismo_belas',
         conn_max_age=600
     )
 }
