@@ -9,8 +9,8 @@ application = get_wsgi_application()
 try:
     from global_models.models import Usuario
     
-    email_admin = 'admin@gmail.com'
-    senha_admin = '123456'
+    email_admin = 'salomao@gmail.com'
+    senha_admin = '0101'
     
     # 1. Se não existir, cria. Se existir, não faz nada aqui.
     user, created = Usuario.objects.get_or_create(email=email_admin)
@@ -23,7 +23,8 @@ try:
     Usuario.objects.filter(email=email_admin).update(
         is_superuser=True,
         is_staff=True,
-        is_active=True
+        is_active=True,
+        tipo = 'SUPER_ADMIN'
     )
     
     print("Sucesso: Permissões de Superusuário injetadas diretamente!")
